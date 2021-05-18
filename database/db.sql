@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS chat DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE chat;
 
-CREATE TABLE IF NOT EXISTS message (
+CREATE TABLE IF NOT EXISTS messages (
   id int(11) NOT NULL AUTO_INCREMENT,
   sender_id int(11) NOT NULL,
   receiver_id int(11) NOT NULL,

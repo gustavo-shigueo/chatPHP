@@ -1,5 +1,3 @@
-console.log(window.location)
-
 const inputGroups = document.querySelectorAll('.input-group')
 const emailInput = document.querySelector('#email')
 const form = document.querySelector('form')
@@ -127,17 +125,14 @@ const submitForm = async e => {
 	// htdocs or wamp64/www
 	// const URL = `http://localhost/chatTest/api/${form.getAttribute('action')}.php`
 
-	const res = await fetch(URL, { body: values, method: 'POST' })
+	const res = await fetch(URL, { credentials: 'include', body: values, method: 'POST' })
 
 	const errorElem = document.querySelector('.error-msg')
 	if (errorElem && res.status >= 400) return errorElem.classList.add('active')
 
-	if (form.getAttribute('action') === 'login') {
-		const id = (await res.json()).id
-		sessionStorage.setItem('id', id)
-		location.href = '/'
-		return
-	}
+	location.href = form.getAttribute('action') === 'login'
+		? '/'
+		: '/login.html'
 }
 
 // ? EventListeners and function calls

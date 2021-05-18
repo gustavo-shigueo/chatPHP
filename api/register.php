@@ -1,5 +1,5 @@
 <?php
-  include_once ('./connection.php');
+  include_once './connection.php';
 
   foreach ($_POST as $key => $value) $$key = $value;
 
