@@ -5,6 +5,8 @@ image:
 ports:
   - port: 3006
     onOpen: ignore
+  - port: 5500
+    onOpen: open-preview
 
 # List the start up tasks. You can start them in parallel in multiple terminals. See https://www.gitpod.io/docs/config-start-tasks/
 tasks:
@@ -12,3 +14,4 @@ tasks:
     command: php .\bin\chat-server.php
   - init: echo 'serving api'
     command: cd api && php -S localhost:3000
+  - command: gp await-port 3306 && mysql -u root -h localhost < database/db.sql

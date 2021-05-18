@@ -133,9 +133,9 @@ const submitForm = async e => {
 	if (errorElem && res.status >= 400) return errorElem.classList.add('active')
 
 	if (form.getAttribute('action') === 'login') {
-		// sessionStorage.setItem()
-		console.log(await res.json())
-		// location.href = '/'
+		const id = (await res.json()).id
+		sessionStorage.setItem('id', id)
+		location.href = '/'
 		return
 	}
 }
