@@ -1,0 +1,11 @@
+{
+	"liveServer.settings.root": "/client",
+	"liveSassCompile.settings.formats": [
+		{
+			"format": "compressed",
+			"extensionName": ".css",
+			"savePath": "/client/css/"
+		}
+	],
+	"liveSassCompile.settings.generateMap": false
+}
