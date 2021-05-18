@@ -1,7 +1,7 @@
 <?php
   session_start();
 
-  $host = 'localhost';
+  $host = 'https://3006-apricot-leopard-ymp6bvu4.ws-us04.gitpod.io/';
   $user = 'root';
   $password = '';
   $database = 'chat';
@@ -12,4 +12,4 @@
   header("Access-Control-Allow-Origin: *");
   header("Access-Control-Allow-Headers: *");
   header("Access-Control-Expose-Headers: *");
-  header("Access-Control-Allow-Methods: *");
+  header("Access-Control-Allow-Methods: *");''

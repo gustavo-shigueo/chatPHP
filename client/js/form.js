@@ -130,10 +130,12 @@ const submitForm = async e => {
 	const res = await fetch(URL, { body: values, method: 'POST' })
 
 	const errorElem = document.querySelector('.error-msg')
-	if (errorElem && res.status === 401) return errorElem.classList.add('active')
+	if (errorElem && res.status >= 400) return errorElem.classList.add('active')
 
 	if (form.getAttribute('action') === 'login') {
-		location.href = '/'
+		// sessionStorage.setItem()
+		console.log(await res.json())
+		// location.href = '/'
 		return
 	}
 }
