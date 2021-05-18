@@ -8,5 +8,7 @@ ports:
 
 # List the start up tasks. You can start them in parallel in multiple terminals. See https://www.gitpod.io/docs/config-start-tasks/
 tasks:
-  - init: echo 'init script' # runs during prebuild
-    command: echo 'start script'
+  - init: echo 'serving WebSocket' # runs during prebuild
+    command: php .\bin\chat-server.php
+  - init: echo 'serving api'
+    command: cd api && php -S localhost:3000
