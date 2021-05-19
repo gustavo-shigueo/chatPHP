@@ -44,8 +44,8 @@ if (logoutBtn) {
 		}).then(() => {
 			logoutEvent()
 			conn.close()
+			location.href = '/login.html'
 		})
-		location.href = '/login.html'
 	})
 }
 
