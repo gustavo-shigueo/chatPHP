@@ -23,8 +23,9 @@
 
       $msg = json_decode($msg);
       if ($msg -> action === 'login' || $msg -> action === 'logout') {
-        foreach ($this->clients as $client) {
+        foreach ($this -> clients as $client) {
           if ($from !== $client) $client -> send(json_encode($msg));
+          else if ($msg -> action === 'login') $client -> id = $msg -> id;
         }
 
         if ($msg -> action === 'logout') {
