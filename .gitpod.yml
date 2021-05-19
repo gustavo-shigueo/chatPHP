@@ -17,6 +17,5 @@ tasks:
   - init: echo 'serving api'
     command: cd api && php -S localhost:3000
   - command: gp await-port 3306 && mysql -u root -h localhost < database/db.sql
-  - command: npm i -g http-server 
   - init: echo 'serving client'
-    command: cd client && http-server
+    command: npm i -g http-server && cd client && http-server
