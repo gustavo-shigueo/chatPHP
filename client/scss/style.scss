@@ -82,6 +82,25 @@ body {
 		padding-bottom: 0.5rem;
 		font-size: 0.8rem;
 
+		.left-group {
+			display: flex;
+			align-items: center;
+			height: 100%;
+			padding: 5px 0;
+
+			a {
+				text-decoration: none;
+				font-size: 1.5rem;
+				margin-right: 1rem;
+			}
+		}
+
+		button.btn {
+			width: unset;
+			min-width: unset;
+			padding: calc(0.75em - 3px) 1em;
+		}
+
 		.contact-info {
 			flex-grow: 0;
 			text-align: right;
@@ -298,4 +317,12 @@ input {
 	color: var(--light-0);
 	font-weight: bold;
 	box-shadow: var(--shadow-0);
+	box-shadow: var(--shadow-0);
+
+	&.btn-light {
+		background-color: var(--light-0);
+		color: var(--dark-1);
+		border: 2px solid var(--dark-1);
+		box-shadow: none;
+	}
 }

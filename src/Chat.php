@@ -21,13 +21,34 @@
       $numRecv = count($this->clients) - 1;
       echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n", $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
 
-      foreach ($this->clients as $client) {
-        if ($from !== $client) $client -> send($msg);
+      $msg = json_decode($msg);
+      if ($msg -> action === 'login' || $msg -> action === 'logout') {
+        foreach ($this->clients as $client) {
+          if ($from !== $client) $client -> send(json_encode($msg));
+        }
+
+        if ($msg -> action === 'logout') {
+          $fields = [
+            'id' => $msg -> id,
+            'status' => 0
+          ];
+          $fields_string = http_build_query($fields);
+
+          $ch = curl_init();
+
+          curl_setopt($ch,CURLOPT_URL, $msg -> url);
+          curl_setopt($ch,CURLOPT_POST, true);
+          curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+
+          curl_setopt($ch,CURLOPT_RETURNTRANSFER, true); 
+
+          $result = curl_exec($ch);
+        }
       }
     }
 
     public function onClose(ConnectionInterface $conn): void {
-      $this->clients->detach($conn);
+      $this -> clients -> detach($conn);
       echo "Connection {$conn -> resourceId} has disconnected\n";
     }
 

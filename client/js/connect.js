@@ -1,6 +1,8 @@
 const host = window.location.host.replace(/^(\d{4})/, '3000')
 const container = document.querySelector('.contacts-container')
 const search = document.querySelector('#search')
+const logoutBtn = document.querySelector('#logout')
+let userId
 
 const checkLogin = async () => {
 	const URL = `https://${host}/checkLogin.php`
@@ -37,7 +39,8 @@ const createContactElem = user => {
 	contactImg.style = `--url: url('https://${host}/images/${
 		user.image ?? 'foto.jpg'
 	}')`
-	if (!!parseInt(user.online_status)) online.classList.add('active')
+	if (parseInt(user.online_status)) online.classList.add('active')
+	console.log(user.online_status)
 
 	contactInfo.appendChild(name)
 	contactInfo.appendChild(message)
@@ -64,10 +67,10 @@ const handleSearch = () => {
 
 const main = async () => {
 	const checkResult = await checkLogin()
-	const myId = checkResult.id
+	userId = checkResult.id
 	if (checkResult.error) return (location.href = '/login.html')
 	if (search) {
-		const users = await getUsers(myId)
+		const users = await getUsers(checkResult.id)
 		users.forEach(createContactElem)
 		search.addEventListener('input', handleSearch)
 	}
