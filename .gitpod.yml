@@ -19,4 +19,4 @@ tasks:
   - command: gp await-port 3306 && mysql -u root -h localhost < database/db.sql
   - command: npm i -g http-server 
   - init: echo 'serving client'
-    command: cd client http-server && http-server
+    command: cd client && http-server
