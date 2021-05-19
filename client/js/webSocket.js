@@ -6,12 +6,13 @@ const sendEvent = e => {
 	conn.send(JSON.stringify(e))
 }
 
-const logoutEvent = () =>
+const logoutEvent = () => {
 	sendEvent({
 		id: userId,
 		action: 'logout',
 		url: `https://${host}/setOnlineStatus.php`,
 	})
+}
 
 conn.addEventListener('open', async () => {
 	const body = new FormData()
@@ -37,7 +38,10 @@ conn.addEventListener('message', e => {
 
 if (logoutBtn) {
 	logoutBtn.addEventListener('click', () => {
-		fetch(`https://${host}/logout.php`, { credentials: 'include', method: 'POST' }).then(() => {
+		fetch(`https://${host}/logout.php`, {
+			credentials: 'include',
+			method: 'POST',
+		}).then(() => {
 			logoutEvent()
 			conn.close()
 		})
