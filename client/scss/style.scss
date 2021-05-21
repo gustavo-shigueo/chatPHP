@@ -318,11 +318,35 @@ input {
 	font-weight: bold;
 	box-shadow: var(--shadow-0);
 	box-shadow: var(--shadow-0);
+	position: relative;
+	overflow: hidden;
 
 	&.btn-light {
 		background-color: var(--light-0);
 		color: var(--dark-1);
 		border: 2px solid var(--dark-1);
 		box-shadow: none;
+	}
+
+	&:hover, &:focus {
+		filter: brightness(1.15);
+	}
+
+	&::after {
+		content: '';
+		display: block;
+		position: absolute;
+		width: 500px;
+		height: 500px;
+		background-color: hsla(0, 0%, 100%, .2);
+		top: 50%;
+		left: 50%;
+		border-radius: 50%;
+		transform: translate(-50%, -50%) scale(0);
+		transition: transform 100ms ease-in-out;
+	}
+	
+	&:active::after {
+		transform: translate(-50%, -50%) scale(1);
 	}
 }

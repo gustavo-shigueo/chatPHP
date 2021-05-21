@@ -8,25 +8,29 @@ const sendEvent = e => {
 
 const logoutEvent = () => {
 	sendEvent({
-		id: userId,
+		id: userId ?? 0,
 		action: 'logout',
 		url: `https://${host}/setOnlineStatus.php`,
 	})
 }
 
-conn.addEventListener('open', async () => {
-	const body = new FormData()
-	body.append('id', userId)
-	body.append('status', 1)
-	await fetch(`https://${host}/setOnlineStatus.php`, {
-		method: 'POST',
-		body,
+if (location.pathname !== '/register.html') {
+	conn.addEventListener('open', async () => {
+		const body = new FormData()
+		body.append('id', userId)
+		body.append('status', 1)
+		await fetch(`https://${host}/setOnlineStatus.php`, {
+			credentials: 'include',
+			method: 'POST',
+			body,
+		})
+		conn.send(JSON.stringify({ id: userId, action: 'login' }))
 	})
-	conn.send(JSON.stringify({ id: userId, action: 'login' }))
-})
+}
 
 conn.addEventListener('message', e => {
 	const data = JSON.parse(e.data)
+	console.log(data)
 
 	if (['login', 'logout'].includes(data.action)) {
 		const userElem = document.querySelector(`[data-id="${data.id}"]`)
@@ -34,9 +38,13 @@ conn.addEventListener('message', e => {
 			.querySelector('.contact-status')
 			.classList.toggle('active', data.action === 'login')
 	}
+
+	if (data.action === 'register' && document.querySelector('#logout')) {
+		createContactElem(data)
+	}
 })
 
-if (logoutBtn) {
+if (document.querySelector('#logout')) {
 	logoutBtn.addEventListener('click', () => {
 		fetch(`https://${host}/logout.php`, {
 			credentials: 'include',
@@ -47,9 +55,9 @@ if (logoutBtn) {
 			location.href = '/login.html'
 		})
 	})
-}
 
-window.addEventListener('beforeunload', async () => {
-	logoutEvent()
-	return ','
-})
+	window.addEventListener('beforeunload', async () => {
+		logoutEvent()
+		return ''
+	})
+}

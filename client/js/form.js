@@ -1,3 +1,4 @@
+const host = window.location.host.replace(/^(\d{4})/, '3000')
 const inputGroups = document.querySelectorAll('.input-group')
 const emailInput = document.querySelector('#email')
 const form = document.querySelector('form')
@@ -113,26 +114,36 @@ const submitForm = async e => {
 	if (!validForm) return
 
 	const values = new FormData()
+	const register = {}
 	const inputs = form.querySelectorAll('input')
 
-	inputs.forEach(i => values.append(i.getAttribute('name'), i.value))
+	inputs.forEach(i => {
+		values.append(i.getAttribute('name'), i.value)
+		if (form.getAttribute('action') === 'register' && !i.name.match(/password|email/)) {
+			register[i.getAttribute('name')] = i.value
+		}
+	})
 
-
-	const host = window.location.host.replace(/^(\d{4})/, '3000')
 	const URL = `https://${host}/${form.getAttribute('action')}.php`
 
-	// If you are serving the api locally with the root of this project on your
-	// htdocs or wamp64/www
-	// const URL = `http://localhost/chatTest/api/${form.getAttribute('action')}.php`
-
-	const res = await fetch(URL, { credentials: 'include', body: values, method: 'POST' })
+	const res = await fetch(URL, {
+		credentials: 'include',
+		body: values,
+		method: 'POST',
+	})
+	const data = form.getAttribute('action') === 'register' ? await res.json() : {}
 
 	const errorElem = document.querySelector('.error-msg')
-	if (errorElem && res.status >= 400) return errorElem.classList.add('active')
+	if (errorElem && res.status >= 400) {
+		errorElem.innerText = data.error ?? 'Invalid credentials'
+		return errorElem.classList.add('active')
+	}
 
-	location.href = form.getAttribute('action') === 'login'
-		? '/'
-		: '/login.html'
+	if (form.getAttribute('action') === 'register') {
+		conn.send(JSON.stringify({action: 'register', id: parseInt(data.id), ...register}))
+	}
+
+	location.href = form.getAttribute('action') === 'login' ? '/' : '/login.html'
 }
 
 // ? EventListeners and function calls

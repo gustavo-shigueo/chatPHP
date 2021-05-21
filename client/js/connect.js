@@ -1,5 +1,6 @@
 const host = window.location.host.replace(/^(\d{4})/, '3000')
-const container = document.querySelector('.contacts-container')
+const contactsContainer = document.querySelector('.contacts-container')
+const messagesContainer = document.querySelector('.messages-container')
 const search = document.querySelector('#search')
 const logoutBtn = document.querySelector('#logout')
 let userId
@@ -11,7 +12,7 @@ const checkLogin = async () => {
 }
 
 const getUsers = async id => {
-	const URL = `https://${host}/listUsers.php`
+	const URL = `https://${window.location.host.replace(/^(\d{4})/, '3000')}/listUsers.php`
 	const body = new FormData()
 	body.append('id', id)
 	const res = await fetch(URL, { method: 'POST', body })
@@ -40,7 +41,6 @@ const createContactElem = user => {
 		user.image ?? 'foto.jpg'
 	}')`
 	if (parseInt(user.online_status)) online.classList.add('active')
-	console.log(user.online_status)
 
 	contactInfo.appendChild(name)
 	contactInfo.appendChild(message)
@@ -49,7 +49,7 @@ const createContactElem = user => {
 	contact.appendChild(contactImg)
 	contact.appendChild(contactInfo)
 
-	container.appendChild(contact)
+	contactsContainer.appendChild(contact)
 }
 
 const hideContact = contact => {
@@ -61,7 +61,7 @@ const hideContact = contact => {
 }
 
 const handleSearch = () => {
-	const contacts = container.querySelectorAll('.contact')
+	const contacts = contactsContainer.querySelectorAll('.contact')
 	contacts.forEach(hideContact)
 }
 
@@ -73,6 +73,10 @@ const main = async () => {
 		const users = await getUsers(checkResult.id)
 		users.forEach(createContactElem)
 		search.addEventListener('input', handleSearch)
+	}
+	if (messagesContainer && location.search.match(/^\?receiver_id=\d{0,}$/)) {
+		console.log('messages')
+
 	}
 }
 

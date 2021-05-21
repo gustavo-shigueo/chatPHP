@@ -15,12 +15,16 @@
 
 		<link rel="stylesheet" href="./css/style.css" />
 
+		<!-- Defining unused (in this file) empty js variable to avoid reference error in console -->
+		<script>let userId;</script>
+		<script src="./js/webSocket.js" defer></script>
 		<script src="./js/form.js" defer></script>
 	</head>
 	<body>
 		<div class="container">
 			<div class="header"><h1>Register</h1></div>
 			<div class="form-container">
+				<div class="error-msg"></div>
 				<form action="register">
 					<div class="input-group">
 						<label for="name">Name:</label>
