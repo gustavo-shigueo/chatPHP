@@ -18,7 +18,7 @@
     }
 
     public function onMessage(ConnectionInterface $from, $msg): void {
-      $numRecv = count($this->clients) - 1;
+      $numRecv = count($this -> clients) - 1;
       echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n", $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
 
       $msg = json_decode($msg);
@@ -44,6 +44,13 @@
           curl_setopt($ch,CURLOPT_RETURNTRANSFER, true); 
 
           $result = curl_exec($ch);
+        }
+      }
+
+      if ($msg -> action === 'register') {
+        foreach ($this -> clients as $client) {
+          if ($from !== $client) print_r($msg);
+          if ($from !== $client) $client -> send(json_encode($msg));
         }
       }
     }

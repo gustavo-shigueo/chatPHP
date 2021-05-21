@@ -30,7 +30,7 @@
   $result = $stmt -> execute();
 
   if ($result) {
-    $response = array('success' => true);
+    $response = array('success' => true, 'id' => $con -> query("SELECT LAST_INSERT_ID()") -> fetch_assoc()['LAST_INSERT_ID()']);
     echo json_encode($response);
     http_response_code(201);
     exit;
