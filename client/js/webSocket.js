@@ -87,7 +87,10 @@ conn.addEventListener('message', e => {
 		if (document.querySelector('#message-text')) {
 			showMessage({ ...data, timeSent: new Date() })
 			messagesContainer.scrollTop = messagesContainer.scrollHeight
+			return
 		}
+
+		document.querySelector(`[data-id="${data.id}"] p`).innerText = data.text
 	}
 })
 

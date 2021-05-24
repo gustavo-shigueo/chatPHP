@@ -33,7 +33,7 @@ const createContactElem = user => {
 	const name = document.createElement('h2')
 	const message = document.createElement('p')
 
-	contact.dataset.id = user.id
+	contact.dataset.id = user.user_id
 
 	contact.classList.add('contact')
 	contactImg.classList.add('contact-img')
@@ -41,7 +41,7 @@ const createContactElem = user => {
 	online.classList.add('contact-status')
 
 	name.innerText = user.name
-	message.innerHTML = user.message ?? 'No messages'
+	message.innerHTML = user.lastMsg ?? 'No messages'
 	contactImg.style = `--url: url('https://${host}/images/${
 		user.image ?? 'foto.jpg'
 	}')`
@@ -56,7 +56,7 @@ const createContactElem = user => {
 
 	contactsContainer.appendChild(contact)
 
-	contact.setAttribute('href', `./chat.html?receiver_id=${user.id}`)
+	contact.setAttribute('href', `./chat.html?receiver_id=${user.user_id}`)
 }
 
 const hideContact = contact => {
@@ -105,6 +105,7 @@ const main = async () => {
 	if (checkResult.error) return (location.href = '/login.html')
 	if (search) {
 		const users = await getUsers(checkResult.id)
+		console.log(users)
 		users.forEach(createContactElem)
 		search.addEventListener('input', handleSearch)
 	}
