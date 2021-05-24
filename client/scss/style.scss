@@ -212,6 +212,7 @@ input {
 }
 
 .contact {
+	text-decoration: none;
 	display: flex;
 	align-items: center;
 	padding: 1rem 0;
@@ -271,12 +272,23 @@ input {
 
 .message {
 	max-width: 70%;
-	padding: 1em 1.15em;
+	padding: 1em 1.15em 2em 1.15em;
 	background-color: var(--light-1);
 	margin-bottom: 10px;
 	border-radius: 20px;
 	border-top-left-radius: 0;
 	line-height: 1.1;
+	position: relative;
+
+	.timestamp {
+		width: fit-content;
+		position: absolute;
+		overflow: hidden;
+		bottom: 10px;
+		padding: 0 10px;
+		font-size: 0.75rem;
+		left: 10px;
+	}
 
 	&.sent {
 		border-top-left-radius: 20px;
@@ -284,6 +296,11 @@ input {
 		margin-left: auto;
 		background-color: var(--dark-1);
 		color: var(--light-0);
+
+		.timestamp {
+			left: 100%;
+			transform: translateX(calc(-100% - 5px));
+		}
 	}
 }
 

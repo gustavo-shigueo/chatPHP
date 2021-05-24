@@ -53,6 +53,12 @@
           if ($from !== $client) $client -> send(json_encode($msg));
         }
       }
+
+      if ($msg -> action === 'message') {
+        foreach ($this -> clients as $client) {
+          if ($from !== $client && $client -> id === $msg -> receiverId) $client -> send(json_encode($msg));
+        }
+      }
     }
 
     public function onClose(ConnectionInterface $conn): void {

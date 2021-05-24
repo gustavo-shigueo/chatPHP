@@ -15,6 +15,7 @@
 		/>
 
 		<script src="./js/connect.js" defer></script>
+		<script src="./js/webSocket.js" defer></script>
 
 		<link rel="stylesheet" href="./css/style.css" />
 	</head>
@@ -28,24 +29,11 @@
 					<div class="contact-img"></div>
 				</div>
 				<div class="contact-info">
-					<h1>Gustavo Shigueo</h1>
-					<p>Online now</p>
+					<h1></h1>
+					<p></p>
 				</div>
 			</div>
-			<div class="messages-container">
-				<div class="message">
-					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptates,
-					voluptatibus?
-				</div>
-				<div class="message">
-					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptates,
-					voluptatibus?
-				</div>
-				<div class="message sent">
-					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptates,
-					voluptatibus?
-				</div>
-			</div>
+			<div class="messages-container"></div>
 			<div class="input-group">
 				<input
 					type="text"
@@ -53,8 +41,9 @@
 					autofocus
 					autocapitalize="sentences"
 					spellcheck="true"
+					id="message-text"
 				/>
-				<button class="btn btn-dark">
+				<button class="btn btn-dark" id="send">
 					<i class="fas fa-paper-plane"></i>
 				</button>
 			</div>

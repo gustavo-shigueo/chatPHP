@@ -3,6 +3,8 @@ const contactsContainer = document.querySelector('.contacts-container')
 const messagesContainer = document.querySelector('.messages-container')
 const search = document.querySelector('#search')
 const logoutBtn = document.querySelector('#logout')
+const sendBtn = document.querySelector('#send')
+const msgText = document.querySelector('#message-text')
 let userId
 
 const checkLogin = async () => {
@@ -12,7 +14,10 @@ const checkLogin = async () => {
 }
 
 const getUsers = async id => {
-	const URL = `https://${window.location.host.replace(/^(\d{4})/, '3000')}/listUsers.php`
+	const URL = `https://${window.location.host.replace(
+		/^(\d{4})/,
+		'3000'
+	)}/listUsers.php`
 	const body = new FormData()
 	body.append('id', id)
 	const res = await fetch(URL, { method: 'POST', body })
@@ -20,7 +25,7 @@ const getUsers = async id => {
 }
 
 const createContactElem = user => {
-	const contact = document.createElement('div')
+	const contact = document.createElement('a')
 	const contactImg = document.createElement('div')
 	const contactInfo = document.createElement('div')
 	const online = document.createElement('div')
@@ -50,6 +55,8 @@ const createContactElem = user => {
 	contact.appendChild(contactInfo)
 
 	contactsContainer.appendChild(contact)
+
+	contact.setAttribute('href', `./chat.html?receiver_id=${user.id}`)
 }
 
 const hideContact = contact => {
@@ -65,6 +72,33 @@ const handleSearch = () => {
 	contacts.forEach(hideContact)
 }
 
+const getMessages = async (id, receiver_id) => {
+	const body = new FormData()
+	body.append('id', id)
+	body.append('receiver_id', receiver_id)
+	const response = await fetch(`https://${host}/getMessages.php`, {
+		method: 'POST',
+		body,
+	})
+	return response.json()
+}
+
+const showMessage = msg => {
+	const message = document.createElement('div')
+	const time = document.createElement('span')
+
+	message.classList.add('message')
+	message.classList.toggle('sent', msg.sender_id === userId)
+	message.innerText = msg.text
+
+	time.classList.add('timestamp')
+	time.innerText = new Date(msg.timeSent).toLocaleString().slice(0, -3)
+
+	message.appendChild(time)
+
+	messagesContainer.appendChild(message)
+}
+
 const main = async () => {
 	const checkResult = await checkLogin()
 	userId = checkResult.id
@@ -74,9 +108,16 @@ const main = async () => {
 		users.forEach(createContactElem)
 		search.addEventListener('input', handleSearch)
 	}
-	if (messagesContainer && location.search.match(/^\?receiver_id=\d{0,}$/)) {
-		console.log('messages')
-
+	if (messagesContainer) {
+		if (!location.search.match(/^\?receiver_id=\d{1,}$/)) {
+			return (location.href = '/')
+		}
+		const receiver_id = parseInt(location.search.split('=')[1])
+		const { receiver, messages } = await getMessages(userId, receiver_id)
+		document.querySelector('.contact-info h1').innerText = receiver.name
+		document.querySelector('.contact-info p').innerText = receiver.online_status ? 'Online now' : 'Offline'
+		if (messages.length > 0) messages.forEach(showMessage)
+		messagesContainer.scrollTop = messagesContainer.scrollHeight
 	}
 }
 
