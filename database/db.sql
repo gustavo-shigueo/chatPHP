@@ -2,22 +2,23 @@ CREATE DATABASE IF NOT EXISTS chat DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4
 USE chat;
 
 CREATE TABLE IF NOT EXISTS messages (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  sender_id int(11) NOT NULL,
-  receiver_id int(11) NOT NULL,
-  text text COLLATE utf8mb4_general_ci NOT NULL,
-  timeSent datetime NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sender_id` int(11) NOT NULL,
+  `receiver_id` int(11) NOT NULL,
+  `text` text COLLATE utf8mb4_general_ci NOT NULL,
+  `timeSent` datetime NOT NULL,
   PRIMARY KEY (id),
   KEY receiver_id (receiver_id),
   KEY sender_id (sender_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS users (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  name varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  email varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  password varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  online_status tinyint(1) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `online_status` tinyint(1) NOT NULL,
+  `imagePath` VARCHAR(255) NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

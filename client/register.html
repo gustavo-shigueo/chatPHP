@@ -14,11 +14,20 @@
 		/>
 
 		<link rel="stylesheet" href="./css/style.css" />
+		<link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.css" />
+		<link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" >
+
+		<script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js" defer></script>
+		<script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js" defer></script>
+		<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js" defer></script>
+		<script src="https://unpkg.com/filepond/dist/filepond.js" defer></script>
 
 		<!-- Defining unused (in this file) empty js variable to avoid reference error in console -->
 		<script>let userId;</script>
 		<script src="./js/webSocket.js" defer></script>
 		<script src="./js/form.js" defer></script>
+		<script src="./js/fileUpload.js" defer></script>
+
 	</head>
 	<body>
 		<div class="container">
@@ -26,6 +35,19 @@
 			<div class="form-container">
 				<div class="error-msg"></div>
 				<form action="register">
+
+					<div class="wrapper">
+
+						<div class="image-input">
+							<div class="input-group filepond-input">
+								<label for="image">Profile picture:</label>
+								<input type="file" name="image" id="image" class="filepond">
+								<small class="error">This field is required</small>
+							</div>
+						</div>
+
+						<div class="text-inputs">
+
 					<div class="input-group">
 						<label for="name">Name:</label>
 						<input
@@ -65,6 +87,11 @@
 							<i class="fas fa-eye"></i>
 						</div>
 						<small class="error">Passwords must match</small>
+					</div>
+
+						</div>
+					
+
 					</div>
 
 					<button class="btn btn-dark" id="submit">Send</button>

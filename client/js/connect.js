@@ -42,8 +42,8 @@ const createContactElem = user => {
 
 	name.innerText = user.name
 	message.innerHTML = user.lastMsg ?? 'No messages'
-	contactImg.style = `--url: url('https://${host}/images/${
-		user.image ?? 'foto.jpg'
+	contactImg.style = `--url: url('https://${host}/${
+		user.imagePath ?? 'foto.jpg'
 	}')`
 	if (parseInt(user.online_status)) online.classList.add('active')
 
@@ -116,7 +116,14 @@ const main = async () => {
 		const receiver_id = parseInt(location.search.split('=')[1])
 		const { receiver, messages } = await getMessages(userId, receiver_id)
 		document.querySelector('.contact-info h1').innerText = receiver.name
-		document.querySelector('.contact-info p').innerText = receiver.online_status ? 'Online now' : 'Offline'
+		document.querySelector('.contact-info p').innerText = receiver.online_status
+			? 'Online now'
+			: 'Offline'
+		document.querySelector(
+			'.contact-img'
+		).style = `--url: url('https://${host}/${
+			receiver.imagePath ?? 'foto.jpg'
+		}')`
 		if (messages.length > 0) messages.forEach(showMessage)
 		messagesContainer.scrollTop = messagesContainer.scrollHeight
 	}

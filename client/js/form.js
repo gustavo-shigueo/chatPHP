@@ -33,6 +33,7 @@ const validateEmail = () => {
 }
 
 const checkForShortInput = input => {
+	if (input.getAttribute('type') === 'file') return
 	const ig = input.id.includes('password')
 		? input.parentElement.parentElement
 		: input.parentElement
@@ -118,11 +119,21 @@ const submitForm = async e => {
 	const inputs = form.querySelectorAll('input')
 
 	inputs.forEach(i => {
+		if (i.getAttribute('type') === 'file') return
 		values.append(i.getAttribute('name'), i.value)
 		if (form.getAttribute('action') === 'register' && !i.name.match(/password|email/)) {
 			register[i.getAttribute('name')] = i.value
 		}
 	})
+
+	if (document.querySelector('[type="file"]')) {
+		if (!filepond.getFile()?.file) {
+			console.log('a')
+			document.querySelector('.filepond-input').classList.add('invalid')
+			return
+		}
+		values.append('file', filepond.getFile().file)
+	}
 
 	const URL = `https://${host}/${form.getAttribute('action')}.php`
 

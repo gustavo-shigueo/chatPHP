@@ -20,7 +20,7 @@
   
   while ($message = $result -> fetch_assoc()) $messages[] = $message;
   
-  $query = "SELECT `name`, `online_status` FROM `users` WHERE `id` = ?";
+  $query = "SELECT `name`, `online_status`, `imagePath` FROM `users` WHERE `id` = ?";
   $stmt = $con -> prepare($query);
   $stmt -> bind_param("i", $receiver_id);
   $stmt -> execute();
