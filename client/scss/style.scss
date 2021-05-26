@@ -65,7 +65,7 @@ body {
 // ? Container styles, shared by all of the pages
 
 .container {
-	width: clamp(400px, 40vw, 600px);
+	width: clamp(400px, 100%, 500px);
 	background-color: var(--light-0);
 	box-shadow: var(--shadow-0);
 
@@ -155,6 +155,7 @@ input {
 	&.filepond-input .filepond--root {
 		width: 200px;
 		height: 200px;
+		border: 1px solid var(--dark-1);
 	}
 
 	.input-icon {
@@ -228,6 +229,23 @@ input {
 	display: flex;
 	justify-content: space-between;
 	gap: 2em;
+
+	@media (max-width: 40rem) {
+		flex-direction: column;
+		gap: 0;
+
+		.image-input-helper {
+			border: 1px solid var(--dark-1);
+			place-items: center;
+			display: grid;
+			background-color: hsl(30, 7%, 94%);
+		}
+
+		.filepond-input .filepond--root {
+			border: none;
+			margin-bottom: 0;
+		}
+	}
 
 	.text-inputs {
 		flex: 1;
