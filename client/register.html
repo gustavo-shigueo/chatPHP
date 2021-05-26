@@ -24,6 +24,14 @@
 		/>
 
 		<script
+			src="https://cdn.socket.io/4.1.1/socket.io.min.js"
+			integrity="sha384-cdrFIqe3RasCMNE0jeFG9xJHog/tgOVC1E9Lzve8LQN1g5WUHo0Kvk1mawWjxX7a"
+			crossorigin="anonymous"
+			defer
+		></script>
+
+		<script
+
 			src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"
 			defer
 		></script>
@@ -55,11 +63,11 @@
 						<div class="image-input">
 							<div class="input-group filepond-input">
 								<label for="image">Profile picture:</label>
-								
+
+								<input type="file" name="image" id="image" class="filepond" />
 								<div class="image-input-helper">
 									<input type="file" name="image" id="image" class="filepond" />
 								</div>
-
 								<small class="error">This field is required</small>
 							</div>
 						</div>

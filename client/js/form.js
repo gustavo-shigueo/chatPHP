@@ -151,7 +151,7 @@ const submitForm = async e => {
 	}
 
 	if (form.getAttribute('action') === 'register') {
-		conn.send(JSON.stringify({action: 'register', id: parseInt(data.id), ...register}))
+		socket.emit('register', { id: parseInt(data.id), ...register })
 	}
 
 	location.href = form.getAttribute('action') === 'login' ? '/' : '/login.html'

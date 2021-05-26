@@ -1,9 +1,9 @@
 const wshost = window.location.host.replace(/^(\d{4})/, '8080')
 
-const conn = new WebSocket(`wss://${wshost}`)
+const socket = io(`wss://${wshost}`)
 
-const sendEvent = e => {
-	conn.send(JSON.stringify(e))
+const sendEvent = (event, data) => {
+	socket.emit(event, data)
 }
 
 const sendMessage = async () => {
@@ -22,30 +22,46 @@ const sendMessage = async () => {
 			method: 'POST',
 			body,
 		})
-		
-		sendEvent({
+
+		sendEvent('msg', {
 			id: userId ?? 0,
 			receiverId,
 			text,
-			action: 'message'
 		})
-	
-		showMessage({ text: msgText.value, timeSent: new Date(), sender_id: userId })
+
+		showMessage({
+			text: msgText.value,
+			timeSent: new Date(),
+			sender_id: userId,
+		})
 		messagesContainer.scrollTop = messagesContainer.scrollHeight
 		msgText.value = ''
 	} catch (error) {}
 }
 
 const logoutEvent = () => {
-	sendEvent({
+	socket.emit('logout', {
 		id: userId ?? 0,
-		action: 'logout',
 		url: `https://${host}/setOnlineStatus.php`,
 	})
 }
 
+const handleLoginAndLogout = (isLogin, { id }) => {
+	console.log(id)
+	if (document.querySelector('#logout') && id !== userId) {
+		const userElem = document.querySelector(`[data-id="${id}"]`)
+		const statusElem = userElem.querySelector('.contact-status')
+		return statusElem.classList.toggle('active', isLogin)
+	}
+
+	if (parseInt(location.search.split('=')[1]) !== parseInt(id)) return
+	const onlineStatusElem = document.querySelector('.contact-info p')
+
+	onlineStatusElem.innerText = isLogin ? 'Online now' : 'Offline'
+}
+
 if (location.pathname !== '/register.html') {
-	conn.addEventListener('open', async () => {
+	socket.on('connect', async () => {
 		const body = new FormData()
 		body.append('id', userId)
 		body.append('status', 1)
@@ -54,44 +70,28 @@ if (location.pathname !== '/register.html') {
 			method: 'POST',
 			body,
 		})
-		conn.send(JSON.stringify({ id: userId, action: 'login' }))
+		socket.emit('login', { id: userId })
 	})
 }
 
-conn.addEventListener('message', e => {
-	const data = JSON.parse(e.data)
-	console.log(data)
+socket.on('login', data => handleLoginAndLogout(true, data))
 
-	if (['login', 'logout'].includes(data.action)) {
-		if (document.querySelector('#logout')) {
-			const userElem = document.querySelector(`[data-id="${data.id}"]`)
-			userElem
-				.querySelector('.contact-status')
-				.classList.toggle('active', data.action === 'login')
-			return
-		}
+socket.on('logout', data => handleLoginAndLogout(false, data))
 
-		if (parseInt(location.search.split('=')[1]) !== parseInt(data.id)) return
+socket.on('register', data => {
+	if (document.querySelector('#logout')) createContactElem(data)
+})
 
-		const onlineStatusElem = document.querySelector('.contact-info p')
-		onlineStatusElem.innerText = data.action === 'login'
-			? 'Online now'
-			: 'Offline'
+socket.on('msg', data => {
+	if (userId !== data.receiverId) return
+
+	if (document.querySelector('#message-text')) {
+		showMessage({ ...data, timeSent: new Date() })
+		messagesContainer.scrollTop = messagesContainer.scrollHeight
+		return
 	}
 
-	if (data.action === 'register' && document.querySelector('#logout')) {
-		createContactElem(data)
-	}
-
-	if (data.action === 'message' && userId === data.receiverId) {
-		if (document.querySelector('#message-text')) {
-			showMessage({ ...data, timeSent: new Date() })
-			messagesContainer.scrollTop = messagesContainer.scrollHeight
-			return
-		}
-
-		document.querySelector(`[data-id="${data.id}"] p`).innerText = data.text
-	}
+	document.querySelector(`[data-id="${data.id}"] p`).innerText = data.text
 })
 
 if (document.querySelector('#logout')) {
@@ -101,7 +101,7 @@ if (document.querySelector('#logout')) {
 			method: 'POST',
 		}).then(() => {
 			logoutEvent()
-			conn.close()
+			socket.disconnect()
 			location.href = '/login.html'
 		})
 	})
@@ -119,3 +119,5 @@ if (document.querySelector('#message-text')) {
 		if (e.key === 'Enter') sendMessage()
 	})
 }
+
+socket.onAny(console.log)
