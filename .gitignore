@@ -1,3 +1,4 @@
 **/.env
 
 api/images/*
+**/node_modules
